@@ -34,7 +34,7 @@ def printTrackinfo(track_to_check, info_size):
         #print(now_playing.get_wiki("content"))
         print(track_to_check.get_wiki_content())
         print("------------")
-    elif (info_size=="New"):
+    elif (info_size=="small"):
         artist = track_to_check.get_artist()
         album = track_to_check.get_album()
         tags= track_to_check.get_top_tags()
@@ -79,16 +79,25 @@ if __name__ == "__main__":
     parser.add_argument("--say", action="store_true", help="Announcertron 4000")
     args = parser.parse_args()
 
-    if args.variant == "standard":
-        print("Standard version coming up")
-        now_playing_track = lastfm_network.get_user(args.username).get_now_playing()
+    if args.variant == "example_small":
+        print("Example version coming up")
         example_track = lastfm_network.get_track("Dire Straits", "Sultans of swing")
-        track_to_check = example_track
-        info_size = "New"
-        printTrackinfo(track_to_check, info_size)
+        info_size = "small"
+        printTrackinfo(example_track, info_size)
 
-    elif args.variant == "test1":
+    elif args.variant == "playing_small":
+        print("Now playing version coming up, minimal info")
+        now_playing_track = lastfm_network.get_user(args.username).get_now_playing()
+        info_size = "small"
+        printTrackinfo(now_playing_track, info_size)
+
+    elif args.variant == "recent_tracks":
         get_recent_tracks(args.username, args.number)
+
+    elif args.variant == "top_geo_tracks":
+        # NOT WORKING YET
+        country = lastfm_network.get_country("SE")
+        top_geo_tracks = lastfm_network.get_geo_top_tracks(country)
 
     else:
         print("No variant choosen")
